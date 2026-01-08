@@ -1,6 +1,6 @@
 
 
-from Notify import ask_mood_notification
+from notify import ask_mood_notification
 
 
 

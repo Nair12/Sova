@@ -1,7 +1,7 @@
 from aiogram.types import Message
 from groq import Groq
 
-from User import User
+from User import User, AiMode
 from Assistant.assistant import Assistant
 
 
@@ -17,6 +17,16 @@ class GorqAssistant(Assistant):
 
     async def send_message(self,message: Message,user:User) -> str:
         chat_id = message.chat.id
+
+        mode = user.get_mode()
+        ai_role = None
+        if mode == AiMode.LISTEN:
+            ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist. now you in listening mode, answer shortly and listen like friend. Do not generate multilanguage text"}
+        if mode == AiMode.DIALOG:
+            ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist. reply in the language of the last message. Do not generate multilanguage text"},
+
+
+
         user.add_message({
             "role": "user",
             "content": message.text
@@ -24,7 +34,7 @@ class GorqAssistant(Assistant):
         completion = self.client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[
-                {"role": "system", "content": "You are Sova, an empathetic AI psychologist. reply in the language of the last message"},
+                ai_role,
                 *user.get_dialog(),
             ]
         )

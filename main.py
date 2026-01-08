@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 from groq import Groq
 
 from Assistant.assistant_factory import AiAssistantFactory
-from Notify import ask_mood_notification
+from notify import ask_mood_notification
 from Task_Scheduler import add_mood_notification_sub
-from User import User
+from User import User, AiMode
 from buttons import BTN_START_DIALOG, BTN_ADVICE_FOR_DAY, BTN_CHARGE_MOTIVATION, BTN_FORGET, BTN_STOP, BTN_DONATES, \
     BTN_LISTEN
 from reply_markups import dialog_process_markup, main_markup
@@ -57,16 +57,17 @@ async def start_handler(message: Message):
 @dp.message(F.text == BTN_LISTEN)
 async def listening_handler(message: Message):
     user = users.setdefault(message.chat.id, User())
-    res = await assistant.enable_listen_mode(message=message,user=user)
-    await message.answer(res)
+    user.set_mode(AiMode.LISTEN)
+
+    await message.answer("Я готов слушать")
 
 
 
 @dp.message(F.text == BTN_START_DIALOG)
 async def start_dialog_handler(message: Message):
     user = users.setdefault(message.chat.id, User())
+    user.set_mode(AiMode.DIALOG)
     res = await assistant.start_dialog(message=message,user=user)
-    await message.answer(res)
     return message.answer(res,reply_markup=dialog_process_markup)
 
 

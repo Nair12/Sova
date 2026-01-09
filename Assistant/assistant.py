@@ -21,10 +21,6 @@ class Assistant(ABC):
     async def start_dialog(self,message:Message,user:User) -> str:
          pass
 
-    @abstractmethod
-    async def enable_listen_mode(self,message:Message,user:User) -> str:
-        pass
-
 
 
 

@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from buttons import BTN_START_DIALOG, BTN_ADVICE_FOR_DAY, BTN_CHARGE_MOTIVATION, BTN_FORGET, BTN_STOP, BTN_DONATES, \
-    BTN_LISTEN
+    BTN_LISTEN, BTN_SETTINGS
 
 main_markup = ReplyKeyboardMarkup(
     keyboard=[
@@ -11,6 +11,7 @@ main_markup = ReplyKeyboardMarkup(
         [KeyboardButton(text=BTN_FORGET)],
         [KeyboardButton(text=BTN_DONATES)],
         [KeyboardButton(text=BTN_LISTEN)],
+        [KeyboardButton(text=BTN_SETTINGS)],
     ],
     resize_keyboard=True
 )
@@ -20,3 +21,5 @@ dialog_process_markup = ReplyKeyboardMarkup(
      ]
 ,
 resize_keyboard=True)
+
+

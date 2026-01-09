@@ -23,7 +23,7 @@ class GorqAssistant(Assistant):
         if mode == AiMode.LISTEN:
             ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist. now you in listening mode, answer shortly and listen like friend. Do not generate multilanguage text"}
         if mode == AiMode.DIALOG:
-            ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist. reply in the language of the last message. Do not generate multilanguage text"},
+            ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist.Try to support the person as a friend. reply in the language of the last message. Do not generate multilanguage text"}
 
 
 
@@ -71,23 +71,7 @@ class GorqAssistant(Assistant):
         return completion.choices[0].message.content
 
 
-    async def enable_listen_mode(self,message: Message,user: User):
-        chat_id = message.chat.id
 
-        completion = self.client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[
-                {"role": "system", "content": "You are Sova, an empathetic AI psychologist."},
-                *user.get_dialog(),
-                {"role": "system", "content": "You switch to the listening mode, "
-                                              "your task is to listen and respond briefly, "
-                                              "as if you are having a conversation and the person is speaking to you, "
-                                              "respond in the language of the dialogue, "
-                                              "if there is no dialogue, then in Russian"},
-
-            ]
-        )
-        return completion.choices[0].message.content
 
 
 

@@ -8,7 +8,7 @@ def add_mood_notification_sub(scheduler,bot,chat_id):
     scheduler.add_job(
         ask_mood_notification,
         trigger="cron",
-        hour=14,
+        hour=18,
         minute=0,
         args=(bot, chat_id),
         id=f"daily_{chat_id}",
@@ -19,7 +19,7 @@ def add_mood_notification_sub(scheduler,bot,chat_id):
 
 
 def remove_mood_notification_sub(scheduler,bot,chat_id):
-    scheduler
+    scheduler.remove_job(f"daily_{chat_id}")
 
 
 

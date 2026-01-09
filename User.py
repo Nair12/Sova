@@ -13,6 +13,7 @@ class User:
     def __init__(self):
         self.__dialog = []
         self.__mode = AiMode.DIALOG
+        self.__notify_enabled = True
 
     def add_message(self,obj):
         self.__dialog.append(obj)
@@ -27,6 +28,12 @@ class User:
 
     def set_mode(self,mode:AiMode):
         self.__mode = mode
+
+    def get_notify_status(self):
+        return self.__notify_enabled
+
+    def set_notify_enabled(self,notify_enabled:bool):
+        self.__notify_enabled = notify_enabled
 
 
 

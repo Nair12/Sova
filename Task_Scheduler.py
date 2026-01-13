@@ -1,7 +1,7 @@
 
 
 from notify import ask_mood_notification
-
+from users_controller import check_user_session
 
 
 def add_mood_notification_sub(scheduler,bot,chat_id):
@@ -14,6 +14,22 @@ def add_mood_notification_sub(scheduler,bot,chat_id):
         id=f"daily_{chat_id}",
         replace_existing=True
     )
+
+
+
+def user_session_schedule(scheduler):
+    scheduler.add_job(
+        check_user_session,
+        trigger="interval",
+        minutes=15,
+        id=f"session",
+        replace_existing=True
+    )
+
+
+
+
+
 
 
 

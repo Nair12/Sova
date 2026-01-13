@@ -22,7 +22,7 @@ class GorqAssistant(Assistant):
         ai_role = None
         if mode == AiMode.LISTEN:
             ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist. now you in listening mode, answer shortly and listen like friend. Do not generate multilanguage text"}
-        if mode == AiMode.DIALOG:
+        elif mode == AiMode.DIALOG:
             ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist.Try to support the person as a friend. reply in the language of the last message. Do not generate multilanguage text"}
 
 

@@ -1,4 +1,5 @@
 import asyncio
+from contextlib import asynccontextmanager
 from datetime import datetime,UTC
 from enum import Enum
 from os import getenv
@@ -8,6 +9,7 @@ from aiogram import F
 from aiogram.types import Message, FSInputFile, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, \
     InlineKeyboardButton, CallbackQuery
 from dotenv import load_dotenv
+
 from MongoDb.mongo_db_factory import MongoDbFactory
 from MongoDb.user_mongo_db_repository import UserMongoDbRepository
 
@@ -19,6 +21,8 @@ from buttons import BTN_START_DIALOG, BTN_ADVICE_FOR_DAY, BTN_CHARGE_MOTIVATION,
 from reply_markups import dialog_process_markup, main_markup, get_settings_keyboard
 from shared import dp,sessions,scheduler,assistant,bot
 from settings_callbacks import notify_disable,notify_enable
+from fastapi import FastAPI, Request,Response
+from aiogram.types import Update
 
 load_dotenv()
 
@@ -151,16 +155,33 @@ async def echo_handler(message: Message):
 
 
 
+WEBHOOK_PATH = "/webhook"
+WEBHOOK_URL = getenv("WEBHOOK_URL") + WEBHOOK_PATH
 
 
-
-
-async def main():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # startup
     scheduler.start()
     user_session_schedule(scheduler=scheduler)
-    await dp.start_polling(bot,close_bot_session= MongoDbFactory.close())
+    await bot.set_webhook(WEBHOOK_URL,allowed_updates=dp.resolve_used_update_types())
+    print("Webhook set:", WEBHOOK_URL)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+    yield
+
+    #  shutdown
+    await bot.delete_webhook()
+    await MongoDbFactory.close()
+    print("Webhook removed")
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+@app.post(WEBHOOK_PATH)
+async def telegram_webhook(request: Request):
+    update = Update.model_validate(await request.json())
+    await dp.feed_update(bot, update)
+    return Response(status_code=200)
 
 

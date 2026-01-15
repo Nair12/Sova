@@ -23,9 +23,9 @@ class MongoDbFactory:
 
 
     @classmethod
-    async def close(cls):
+    def close(cls):
         if cls.__client is not None:
-            await cls.__client.close()
+            cls.__client.close()
 
 
 

@@ -20,7 +20,7 @@ class MongoDbFactory:
                                               connectTimeoutMS=5000,
                                               socketTimeoutMS=5000,
                                               retryWrites=True,
-                                              tls=True
+
                                               )
 
         db =  cls.__client["Sova"]

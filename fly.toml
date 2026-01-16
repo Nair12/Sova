@@ -4,7 +4,7 @@
 #
 
 app = 'sova'
-primary_region = 'iad'
+primary_region = 'fra'
 
 [build]
 

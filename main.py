@@ -171,7 +171,7 @@ async def lifespan(app: FastAPI):
 
     #  shutdown
     await bot.delete_webhook()
-    await MongoDbFactory.close()
+    MongoDbFactory.close()
     print("Webhook removed")
 
 

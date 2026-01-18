@@ -11,6 +11,7 @@ class GorqAssistant(Assistant):
     def __init__(self,api_key):
         super().__init__(api_key)
         self.client = Groq(api_key=api_key)
+        self.systemPrompt = """ You're an AI assistant, Owl. Your job is to listen to people as truthfully as possible and offer advice. Act like a friend who listens and supports them, not like in a psychologist's office, but like a friend trying to support them. Don't ask too many questions; answer only in the language of the user's last message. Avoid multilingual responses. """
 
 
 
@@ -23,7 +24,7 @@ class GorqAssistant(Assistant):
         if mode == AiMode.LISTEN:
             ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist. now you in listening mode, answer shortly and listen like friend. Do not generate multilanguage text"}
         elif mode == AiMode.DIALOG:
-            ai_role =  {"role": "system", "content": "You are Sova, an empathetic AI psychologist.Try to support the person as a friend. reply in the language of the last message. Do not generate multilanguage text"}
+            ai_role =  {"role": "system", "content": self.systemPrompt}
 
 
 
@@ -51,7 +52,7 @@ class GorqAssistant(Assistant):
             model="llama-3.1-8b-instant",
             messages=[
                 {"role": "system",
-                 "content": "You are Sova, an empathetic AI psychologist. The person is leaving you, say goodbye and give a short parting word based on the conversation"},
+                 "content": f"{self.systemPrompt} The person is leaving you, say goodbye and give a short parting word based on the conversation"},
                 *user.get_dialog(),
                 {"role": "user", "content": "Спасибо за поддержку!"}
             ]
@@ -64,7 +65,7 @@ class GorqAssistant(Assistant):
             model="llama-3.1-8b-instant",
             messages=[
                 {"role": "system",
-                 "content": "You are Sova, an empathetic AI psychologist. A someone came to see you, greet him"},
+                 "content": f"{self.systemPrompt} A someone came to see you, greet him"},
                 {"role": "user", "content": "Здраствуйте!"}
             ]
         )

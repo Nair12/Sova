@@ -10,4 +10,9 @@ Features:
 - The bot remembers recent message history for more effective communication
 - Option to erase the assistant's memory
 
+TechStack:
+- Python
+- Aiogram
+- MongoDB(Atlas)
+
 ![View](Images/View.png)
